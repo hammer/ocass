@@ -1,0 +1,23 @@
+Name: OCaml Experiments
+Version: 0.1
+Synopsis: Messing around with OCaml
+Authors: Jeff Hammerbacher <jeff.hammerbacher@gmail.com>
+License: LGPL with OCaml linking exception
+
+Description: Some OCaml experiments
+Homepage: https://github.com/hammer/ocaml-experiments
+
+OASISFormat: 0.4
+BuildTools: ocamlbuild
+Plugins: META (0.4), DevFiles (0.4)
+
+Library "suffix_tree"
+  Path: .
+  Modules: Suffix_tree
+
+Executable "using_suffix_trees"
+  Path: .
+  MainIs: using_suffix_trees.ml
+  CompiledObject: best
+  BuildDepends:
+    suffix_tree
