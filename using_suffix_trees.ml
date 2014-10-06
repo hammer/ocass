@@ -1,3 +1,5 @@
+(* TODO(hammer): read C. diff reference sequence from file *)
+(* TODO(hammer): need a library for turning files into streams of lines and folding over them *)
 let () =
   let string_to_find = "caat" in
   let string_to_search = "atggatatagtttctttatgggacaaaaccctacaattaataaaaggtgacttaacttca" in
