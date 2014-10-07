@@ -20,4 +20,6 @@ Executable "using_suffix_trees"
   MainIs: using_suffix_trees.ml
   CompiledObject: best
   BuildDepends:
-    suffix_tree
+    suffix_tree,
+    batteries
+
