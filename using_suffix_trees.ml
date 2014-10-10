@@ -34,18 +34,27 @@ let z_alg_init s =
   [{ z = z_2; l = 1; r = 1 + z_2 - (min z_2 1) }]
 
 let rec z_alg_rec s ix_infos =
-  let s_length = List.length s - 1 in
-  let ix_infos_length = List.length ix_infos in
-  match ix_infos_length with
-  | 0 -> z_alg_rec s (z_alg_init s)
-  | k when ix_infos_length = s_length -> ix_infos
-  | k -> []
+  let s_length = List.length s in
+  let ix = List.length ix_infos + 1 in
+  match ix with
+  | 1 -> z_alg_rec s (z_alg_init s)
+  | k when ix = s_length -> ix_infos
+  | k when ix > (List.hd ix_infos).r ->
+     let z_k = prefix_match_length s (BatList.drop k s) in
+     if z_k > 0 then
+       let r_k = k + z_k - 1 in
+       let l_k = z_k in
+       z_alg_rec s ({ z = z_k; l = l_k; r = r_k } :: ix_infos)
+     else
+       let last_ix_info = List.hd ix_infos in
+       z_alg_rec s ({ z = z_k; l = last_ix_info.l; r = last_ix_info.r } :: ix_infos)
+  | k -> [] (* TODO(hammer): implement *)
 
 let print_ix_info ix ix_info =
   Printf.printf "(z_%d:%d, l_%d:%d, r_%d:%d)\n" ix ix_info.z ix ix_info.l ix ix_info.r
 
 let () =
-  let pattern = "ca" in
+  let pattern = "ccc" in
   let ix_infos = z_alg_rec (BatString.to_list pattern) [] in
   List.iteri print_ix_info ix_infos
 
