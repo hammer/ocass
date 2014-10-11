@@ -23,3 +23,10 @@ Executable "using_suffix_trees"
     suffix_tree,
     batteries
 
+Executable "using_z_alg"
+  Path: .
+  MainIs: using_z_alg.ml
+  CompiledObject: best
+  BuildDepends:
+    batteries
+
