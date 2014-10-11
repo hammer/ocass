@@ -1,4 +1,5 @@
-let pattern = "aabcaabxaaz"
+let pattern = "aa"
+let text = "aabcaabxaaz"
 
 (* k < |text| *)
 let prefix_match_length text k =
@@ -44,6 +45,30 @@ let z_alg s =
   done;
   zs
 
-let () =
+let test_z_alg () =
   let zs = z_alg pattern in
   Array.iteri (fun i z -> Printf.printf "z_%d: %d\n" i z) zs
+
+let all_indices_of e l =
+  List.rev (BatArray.fold_lefti (fun acc i el -> if el = e then i :: acc else acc) [] l)
+
+let print_int_list l =
+  Printf.printf "[";
+  List.iter (Printf.printf "%d;") l;
+  Printf.printf "]\n"
+
+(* Assumes "$" does not occur in pattern or text *)
+let simple_exact_match pattern text =
+  let n = String.length pattern in
+  let s = pattern ^ "$" ^ text in
+  let zs = z_alg s in
+  let matches_in_s = all_indices_of n zs in
+  let matches_in_text = List.map (fun x -> x - (n + 1)) matches_in_s in
+  match matches_in_text with
+  | [] -> Printf.printf "No matches found!"
+  | l ->
+     Printf.printf "Matches found at indices: ";
+     print_int_list l
+
+let () =
+  simple_exact_match pattern text
