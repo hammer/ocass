@@ -1,5 +1,30 @@
-let pattern = "aa"
-let text = "aabcaabxaaz"
+(*******************)
+(* Example strings *)
+(*******************)
+(* TODO(hammer): move to tests *)
+let pattern1 = "aa"
+let text1 = "aabcaabxaaz"
+let pattern2 = "cabdabdab"
+
+(*********************)
+(* Utility functions *)
+(*********************)
+let all_indices_of e l =
+  List.rev (BatArray.fold_lefti (fun acc i el -> if el = e then i :: acc else acc) [] l)
+
+let print_int_list l =
+  Printf.printf "[";
+  List.iter (Printf.printf "%d;") l;
+  Printf.printf "]\n"
+
+let print_int_array a =
+  Printf.printf "[| ";
+  Array.iter (Printf.printf "%d;") a;
+  Printf.printf " |]\n"
+
+(***************)
+(* Z algorithm *)
+(***************)
 
 (* k < |text| *)
 let prefix_match_length text k =
@@ -37,7 +62,7 @@ let z_alg s =
                     let s_dropped_alpha = BatList.drop alpha_length s_list in
                     let new_ix = (k + beta_length) - alpha_length in
                     let post_beta_length = prefix_match_length s_dropped_alpha new_ix in
-                    beta_length + post_beta_length
+                    beta_length + post_beta_length (* TODO(hammer): update r? *)
                   else
                     beta_length
                   in
@@ -46,16 +71,12 @@ let z_alg s =
   zs
 
 let test_z_alg () =
-  let zs = z_alg pattern in
+  let zs = z_alg text1 in
   Array.iteri (fun i z -> Printf.printf "z_%d: %d\n" i z) zs
 
-let all_indices_of e l =
-  List.rev (BatArray.fold_lefti (fun acc i el -> if el = e then i :: acc else acc) [] l)
-
-let print_int_list l =
-  Printf.printf "[";
-  List.iter (Printf.printf "%d;") l;
-  Printf.printf "]\n"
+(***********************************)
+(* Simple exact matching algorithm *)
+(***********************************)
 
 (* Assumes "$" does not occur in pattern or text *)
 let simple_exact_match pattern text =
@@ -63,12 +84,58 @@ let simple_exact_match pattern text =
   let s = pattern ^ "$" ^ text in
   let zs = z_alg s in
   let matches_in_s = all_indices_of n zs in
-  let matches_in_text = List.map (fun x -> x - (n + 1)) matches_in_s in
-  match matches_in_text with
+  List.map (fun x -> x - (n + 1)) matches_in_s
+
+let test_simple_exact_match () =
+  let match_indices = simple_exact_match pattern1 text1 in
+  match match_indices with
   | [] -> Printf.printf "No matches found!"
   | l ->
      Printf.printf "Matches found at indices: ";
      print_int_list l
 
+(*************************)
+(* Boyer-Moore algorithm *)
+(*************************)
+let compute_big_ns s =
+  let s_rev = BatString.rev s in
+  let zs_s_rev = z_alg s_rev in
+  BatArray.rev zs_s_rev
+
+let compute_big_l's s =
+  let n = String.length s in
+  let big_l's = Array.create n 0 in
+  let big_ns = compute_big_ns s in
+  for j = 0 to n - 1 do
+    let i = n - big_ns.(j) in
+    if i < n then big_l's.(i) <- j
+  done;
+  big_l's
+
+let compute_big_ls s =
+  let n = String.length s in
+  let big_l's = compute_big_l's s in
+  let big_ls = Array.create n 0 in
+  big_ls.(1) <- big_l's.(1);
+  for i = 2 to n - 1 do
+    big_ls.(i) <- max big_ls.(i-1) big_l's.(i)
+  done;
+  big_ls
+
+let test_compute_big_ns () =
+  let big_ns = compute_big_ns pattern2 in
+  print_int_array big_ns
+
+let test_compute_big_l's () =
+  let big_l's = compute_big_l's pattern2 in
+  print_int_array big_l's
+
+let test_compute_big_ls () =
+  let big_ls = compute_big_ls pattern2 in
+  print_int_array big_ls
+
+(***************)
+(* Main method *)
+(***************)
 let () =
-  simple_exact_match pattern text
+  test_compute_big_ls ()
