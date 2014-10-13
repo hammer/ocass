@@ -11,22 +11,23 @@ OASISFormat: 0.4
 BuildTools: ocamlbuild
 Plugins: META (0.4), DevFiles (0.4)
 
-Library "suffix_tree"
+Library "using_z_alg"
   Path: .
-  Modules: Suffix_tree
-
-Executable "using_suffix_trees"
-  Path: .
-  MainIs: using_suffix_trees.ml
-  CompiledObject: best
-  BuildDepends:
-    suffix_tree,
-    batteries
-
-Executable "using_z_alg"
-  Path: .
-  MainIs: using_z_alg.ml
-  CompiledObject: best
+  FindLibName: using_z_alg
+  Modules: Using_z_alg
   BuildDepends:
     batteries
+
+Executable "test_using_z_alg"
+  Path: .
+  Build$: flag(tests)
+  Install: false
+  MainIs: test_using_z_alg.ml
+  CompiledObject: best
+  BuildDepends:
+    batteries,
+    using_z_alg,
+    oUnit
+
+
 

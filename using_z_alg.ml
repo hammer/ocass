@@ -134,8 +134,3 @@ let test_compute_big_ls () =
   let big_ls = compute_big_ls pattern2 in
   print_int_array big_ls
 
-(***************)
-(* Main method *)
-(***************)
-let () =
-  test_compute_big_ls ()
