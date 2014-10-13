@@ -1,6 +1,8 @@
-To build:
+To run tests:
 
 ```
-$ oasis setup -setup-update dynamic
+$ ./oasis_gen.sh
+$ ./configure --enable-tests
 $ make
+$ ./test_using_z_alg.native
 ```
