@@ -1,6 +1,8 @@
 open OUnit2
 
 let string1 = "aabcaabxaaz"
+let string2 = "aa"
+let string3 = "cabdabdab"
 
 let test_prefix_match_length test_ctxt =
   let text = BatString.to_list string1 in
@@ -13,10 +15,16 @@ let test_z_alg test_ctxt =
   let zs = Using_z_alg.z_alg pattern in
   assert_equal expected_zs zs
 
+let test_simple_exact_match test_ctxt =
+  let pattern = string2 in
+  let text = string1 in
+  assert_equal [0; 4; 8] (Using_z_alg.simple_exact_match pattern text)
+
 let suite =
   "suite" >:::
     [ "test_z_alg" >:: test_z_alg;
-      "test_prefix_match_length" >:: test_prefix_match_length
+      "test_prefix_match_length" >:: test_prefix_match_length;
+      "test_simple_exact_match" >:: test_simple_exact_match
     ]
 
 let () =

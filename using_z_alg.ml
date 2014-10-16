@@ -1,26 +1,8 @@
-(*******************)
-(* Example strings *)
-(*******************)
-(* TODO(hammer): move to tests *)
-let pattern1 = "aa"
-let text1 = "aabcaabxaaz"
-let pattern2 = "cabdabdab"
-
 (*********************)
 (* Utility functions *)
 (*********************)
 let all_indices_of e l =
   List.rev (BatArray.fold_lefti (fun acc i el -> if el = e then i :: acc else acc) [] l)
-
-let print_int_list l =
-  Printf.printf "[";
-  List.iter (Printf.printf "%d;") l;
-  Printf.printf "]\n"
-
-let print_int_array a =
-  Printf.printf "[| ";
-  Array.iter (Printf.printf "%d;") a;
-  Printf.printf " |]\n"
 
 (***************)
 (* Z algorithm *)
@@ -70,10 +52,6 @@ let z_alg s =
   done;
   zs
 
-let test_z_alg () =
-  let zs = z_alg text1 in
-  Array.iteri (fun i z -> Printf.printf "z_%d: %d\n" i z) zs
-
 (***********************************)
 (* Simple exact matching algorithm *)
 (***********************************)
@@ -85,14 +63,6 @@ let simple_exact_match pattern text =
   let zs = z_alg s in
   let matches_in_s = all_indices_of n zs in
   List.map (fun x -> x - (n + 1)) matches_in_s
-
-let test_simple_exact_match () =
-  let match_indices = simple_exact_match pattern1 text1 in
-  match match_indices with
-  | [] -> Printf.printf "No matches found!"
-  | l ->
-     Printf.printf "Matches found at indices: ";
-     print_int_list l
 
 (*************************)
 (* Boyer-Moore algorithm *)
@@ -121,16 +91,3 @@ let compute_big_ls s =
     big_ls.(i) <- max big_ls.(i-1) big_l's.(i)
   done;
   big_ls
-
-let test_compute_big_ns () =
-  let big_ns = compute_big_ns pattern2 in
-  print_int_array big_ns
-
-let test_compute_big_l's () =
-  let big_l's = compute_big_l's pattern2 in
-  print_int_array big_l's
-
-let test_compute_big_ls () =
-  let big_ls = compute_big_ls pattern2 in
-  print_int_array big_ls
-
