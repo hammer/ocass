@@ -20,11 +20,17 @@ let test_simple_exact_match test_ctxt =
   let text = string1 in
   assert_equal [0; 4; 8] (Using_z_alg.simple_exact_match pattern text)
 
+let test_compute_big_ns test_ctxt =
+  let big_ns = Using_z_alg.compute_big_ns string3 in
+  let expected_big_ns = [| 0;0;2;0;0;5;0;0;0; |] in
+  assert_equal expected_big_ns big_ns
+
 let suite =
   "suite" >:::
     [ "test_z_alg" >:: test_z_alg;
       "test_prefix_match_length" >:: test_prefix_match_length;
-      "test_simple_exact_match" >:: test_simple_exact_match
+      "test_simple_exact_match" >:: test_simple_exact_match;
+      "test_compute_big_ns" >:: test_compute_big_ns
     ]
 
 let () =
