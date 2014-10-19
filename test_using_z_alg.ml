@@ -30,13 +30,19 @@ let test_compute_big_l's test_ctxt =
   let expected_big_l's = [| 0;0;0;0;5;0;0;2;0; |] in
   assert_equal expected_big_l's big_l's
 
+let test_compute_big_ls test_ctxt =
+  let big_ls = Using_z_alg.compute_big_ls string3 in
+  let expected_big_ls = [| 0;0;0;0;5;5;5;5;5; |] in
+  assert_equal expected_big_ls big_ls
+
 let suite =
   "suite" >:::
     [ "test_z_alg" >:: test_z_alg;
       "test_prefix_match_length" >:: test_prefix_match_length;
       "test_simple_exact_match" >:: test_simple_exact_match;
       "test_compute_big_ns" >:: test_compute_big_ns;
-      "test_compute_big_l's" >:: test_compute_big_l's
+      "test_compute_big_l's" >:: test_compute_big_l's;
+      "test_compute_big_ls" >:: test_compute_big_ls
     ]
 
 let () =
