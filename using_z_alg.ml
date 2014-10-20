@@ -20,7 +20,7 @@ let prefix_match_length text k =
 let z_alg s =
   let s_list = BatString.to_list s in
   let s_length = List.length s_list in
-  let zs = Array.create s_length 0 in
+  let zs = Array.make s_length 0 in
   let l = ref 0 in
   let r = ref 0 in
   for k = 1 to s_length - 1 do
@@ -74,7 +74,7 @@ let compute_big_ns s =
 
 let compute_big_l's s =
   let n = String.length s in
-  let big_l's = Array.create n 0 in
+  let big_l's = Array.make n 0 in
   let big_ns = compute_big_ns s in
   for j = 0 to n - 1 do
     let i = n - big_ns.(j) in
@@ -85,7 +85,7 @@ let compute_big_l's s =
 let compute_big_ls s =
   let n = String.length s in
   let big_l's = compute_big_l's s in
-  let big_ls = Array.create n 0 in
+  let big_ls = Array.make n 0 in
   big_ls.(1) <- big_l's.(1);
   for i = 2 to n - 1 do
     big_ls.(i) <- max big_ls.(i-1) big_l's.(i)
