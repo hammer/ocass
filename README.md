@@ -1,8 +1,5 @@
 To run tests:
 
 ```
-$ ./oasis_gen.sh
-$ ./configure --enable-tests
-$ make
-$ ./test_using_z_alg.native
+$ ./reset_and_run_tests.sh
 ```
