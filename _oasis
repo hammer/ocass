@@ -12,14 +12,14 @@ BuildTools: ocamlbuild
 Plugins: META (0.4), DevFiles (0.4)
 
 Library "using_z_alg"
-  Path: .
+  Path: lib
   FindLibName: using_z_alg
   Modules: Using_z_alg
   BuildDepends:
     batteries
 
 Executable "test_using_z_alg"
-  Path: .
+  Path: test
   Build$: flag(tests)
   Install: false
   MainIs: test_using_z_alg.ml
