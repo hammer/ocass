@@ -1,11 +1,11 @@
-Name: OCaml Experiments
+Name: OCaSS
 Version: 0.1
-Synopsis: Messing around with OCaml
+Synopsis: OCaml String Search
 Authors: Jeff Hammerbacher <jeff.hammerbacher@gmail.com>
 License: LGPL with OCaml linking exception
 
-Description: Some OCaml experiments
-Homepage: https://github.com/hammer/ocaml-experiments
+Description: OCaml String Search
+Homepage: https://github.com/hammer/ocass
 
 OASISFormat: 0.4
 BuildTools: ocamlbuild
