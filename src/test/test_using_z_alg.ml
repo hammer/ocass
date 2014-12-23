@@ -4,8 +4,17 @@ let string1 = "aabcaabxaaz"
 let string2 = "aa"
 let string3 = "cabdabdab"
 
+let test_rev test_ctxt =
+  assert_equal "ereht yeh" (Using_z_alg.rev "hey there")
+
+let test_hd test_ctxt =
+  assert_equal ("c", "abdabdab") (Using_z_alg.hd string3)
+
+let test_all_indices_of test_ctxt =
+  assert_equal [1; 3] (Using_z_alg.all_indices_of 1 [|0; 1; 0; 1|])
+
 let test_prefix_match_length test_ctxt =
-  let text = BatString.to_list string1 in
+  let text = string1 in
   let pos = 4 in
   assert_equal 3 (Using_z_alg.prefix_match_length text pos)
 
@@ -37,8 +46,11 @@ let test_compute_big_ls test_ctxt =
 
 let suite =
   "suite" >:::
-    [ "test_z_alg" >:: test_z_alg;
+    [ "test_rev" >:: test_rev;
+      "test_hd" >:: test_hd;
+      "test_all_indices_of" >:: test_all_indices_of;
       "test_prefix_match_length" >:: test_prefix_match_length;
+      "test_z_alg" >:: test_z_alg;
       "test_simple_exact_match" >:: test_simple_exact_match;
       "test_compute_big_ns" >:: test_compute_big_ns;
       "test_compute_big_l's" >:: test_compute_big_l's;

@@ -16,7 +16,8 @@ Library "using_z_alg"
   FindLibName: using_z_alg
   Modules: Using_z_alg
   BuildDepends:
-    batteries
+    batteries,
+    sosa
 
 Executable "test_using_z_alg"
   Path: src/test
@@ -25,7 +26,6 @@ Executable "test_using_z_alg"
   MainIs: test_using_z_alg.ml
   CompiledObject: best
   BuildDepends:
-    batteries,
     using_z_alg,
     oUnit
 

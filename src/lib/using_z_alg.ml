@@ -1,3 +1,11 @@
+module String = struct include Sosa.Native_string end
+
+let rev s =
+  String.of_character_list (String.fold ~init:[] ~f:(fun acc c -> c :: acc) s)
+
+let hd s =
+  String.split_at s 1
+
 (*********************)
 (* Utility functions *)
 (*********************)
@@ -10,22 +18,23 @@ let all_indices_of e l =
 
 (* k < |text| *)
 let prefix_match_length text k =
-  let pattern = BatList.drop k text in
-  let text_prefix = BatList.take (List.length pattern) text in
-  let paired_chars = List.combine text_prefix pattern in
-  let matched_prefix = BatList.take_while (fun (x, y) -> x = y) paired_chars in
-  List.length matched_prefix
+  let pattern = String.drop text k in
+  let rec loop p t n =
+    match hd p, hd t with
+    | (hd1, p), (hd2, t) when hd1 = hd2 -> loop p t (n + 1)
+    | _ -> n
+  in
+  loop pattern text 0
 
 (* so imperative it hurts *)
 let z_alg s =
-  let s_list = BatString.to_list s in
-  let s_length = List.length s_list in
+  let s_length = String.length s in
   let zs = Array.make s_length 0 in
   let l = ref 0 in
   let r = ref 0 in
   for k = 1 to s_length - 1 do
     if k > !r then
-      let z_k = prefix_match_length s_list k in
+      let z_k = prefix_match_length s k in
       if z_k > 0 then
         zs.(k) <- z_k;
         l := k;
@@ -41,7 +50,7 @@ let z_alg s =
       else
         let z_k = if k + beta_length < s_length then
                     let alpha_length = (!r - !l) + 1 in
-                    let s_dropped_alpha = BatList.drop alpha_length s_list in
+                    let s_dropped_alpha = String.drop s alpha_length in
                     let new_ix = (k + beta_length) - alpha_length in
                     let post_beta_length = prefix_match_length s_dropped_alpha new_ix in
                     beta_length + post_beta_length (* TODO(hammer): update r? *)
@@ -68,7 +77,7 @@ let simple_exact_match pattern text =
 (* Boyer-Moore algorithm *)
 (*************************)
 let compute_big_ns s =
-  let s_rev = BatString.rev s in
+  let s_rev = rev s in
   let zs_s_rev = z_alg s_rev in
   BatArray.rev zs_s_rev
 
