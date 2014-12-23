@@ -1,1 +1,16 @@
+# emacs
 *~
+\#*
+
+# oasis
+Makefile
+_build/
+configure
+ocopt.native
+setup.data
+setup.log
+setup.ml
+
+# ocaml
+*.native
+*.bytes
