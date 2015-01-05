@@ -4,9 +4,6 @@ let string1 = "aabcaabxaaz"
 let string2 = "aa"
 let string3 = "cabdabdab"
 
-let test_rev test_ctxt =
-  assert_equal "ereht yeh" (Using_z_alg.rev "hey there")
-
 let test_hd test_ctxt =
   assert_equal ("c", "abdabdab") (Using_z_alg.hd string3)
 
@@ -46,8 +43,7 @@ let test_compute_big_ls test_ctxt =
 
 let suite =
   "suite" >:::
-    [ "test_rev" >:: test_rev;
-      "test_hd" >:: test_hd;
+    [ "test_hd" >:: test_hd;
       "test_all_indices_of" >:: test_all_indices_of;
       "test_prefix_match_length" >:: test_prefix_match_length;
       "test_z_alg" >:: test_z_alg;

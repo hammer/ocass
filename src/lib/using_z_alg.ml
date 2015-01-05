@@ -1,8 +1,5 @@
 module String = struct include Sosa.Native_string end
 
-let rev s =
-  String.of_character_list (String.fold ~init:[] ~f:(fun acc c -> c :: acc) s)
-
 let hd s =
   String.split_at s 1
 
@@ -77,7 +74,7 @@ let simple_exact_match pattern text =
 (* Boyer-Moore algorithm *)
 (*************************)
 let compute_big_ns s =
-  let s_rev = rev s in
+  let s_rev = String.rev s in
   let zs_s_rev = z_alg s_rev in
   BatArray.rev zs_s_rev
 
