@@ -4,8 +4,8 @@ let string1 = "aabcaabxaaz"
 let string2 = "aa"
 let string3 = "cabdabdab"
 
-let test_hd test_ctxt =
-  assert_equal ("c", "abdabdab") (Using_z_alg.hd string3)
+let test_split_hd test_ctxt =
+  assert_equal ("c", "abdabdab") (Using_z_alg.split_hd string3)
 
 let test_all_indices_of test_ctxt =
   assert_equal [1; 3] (Using_z_alg.all_indices_of 1 [|0; 1; 0; 1|])

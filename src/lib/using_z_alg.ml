@@ -1,11 +1,11 @@
 module String = struct include Sosa.Native_string end
 
-let hd s =
-  String.split_at s 1
-
 (*********************)
 (* Utility functions *)
 (*********************)
+let split_hd s =
+  String.split_at s 1
+
 let all_indices_of e l =
   List.rev (BatArray.fold_lefti (fun acc i el -> if el = e then i :: acc else acc) [] l)
 
@@ -46,14 +46,14 @@ let z_alg s =
         zs.(k) <- z_k'
       else
         let z_k = if k + beta_length < s_length then
-                    let alpha_length = (!r - !l) + 1 in
-                    let s_dropped_alpha = String.drop s alpha_length in
-                    let new_ix = (k + beta_length) - alpha_length in
-                    let post_beta_length = prefix_match_length s_dropped_alpha new_ix in
-                    beta_length + post_beta_length (* TODO(hammer): update r? *)
-                  else
-                    beta_length
-                  in
+            let alpha_length = (!r - !l) + 1 in
+            let s_dropped_alpha = String.drop s alpha_length in
+            let new_ix = (k + beta_length) - alpha_length in
+            let post_beta_length = prefix_match_length s_dropped_alpha new_ix in
+            beta_length + post_beta_length (* TODO(hammer): update r? *)
+          else
+            beta_length
+        in
         zs.(k) <- z_k
   done;
   zs
