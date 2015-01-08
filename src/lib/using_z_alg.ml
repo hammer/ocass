@@ -13,17 +13,16 @@ let all_indices_of e l =
 (* Z algorithm *)
 (***************)
 
-(* k < |text| *)
 let prefix_match_length text k =
-  let pattern = String.drop text k in
+  let pattern = String.drop ~index:k text in
   let rec loop p t n =
-    match hd p, hd t with
+    match split_hd p, split_hd t with
     | (hd1, p), (hd2, t) when hd1 = hd2 -> loop p t (n + 1)
     | _ -> n
   in
   loop pattern text 0
 
-(* so imperative it hurts *)
+(* zs.(i) := max k s.t. String.sub s i (i + k) = String.sub s 0 k *)
 let z_alg s =
   let s_length = String.length s in
   let zs = Array.make s_length 0 in
@@ -37,20 +36,23 @@ let z_alg s =
         l := k;
         r := k + z_k - 1
     else
-      (* alpha := S[l..r] *)
-      (* beta  := S[k..r] *)
+      (* alpha := String.sub s l r *)
+      (* beta  := String.sub s k r *)
       let k' = k - !l in
       let z_k' = zs.(k') in
       let beta_length = (!r - k) + 1 in
       if z_k' <= beta_length then
         zs.(k) <- z_k'
       else
-        let z_k = if k + beta_length < s_length then
+        let z_k =
+          if k + beta_length < s_length then
             let alpha_length = (!r - !l) + 1 in
             let s_dropped_alpha = String.drop s alpha_length in
             let new_ix = (k + beta_length) - alpha_length in
             let post_beta_length = prefix_match_length s_dropped_alpha new_ix in
-            beta_length + post_beta_length (* TODO(hammer): update r? *)
+            l := k;
+            r := k + beta_length + post_beta_length - 1;
+            beta_length + post_beta_length
           else
             beta_length
         in
@@ -97,3 +99,10 @@ let compute_big_ls s =
     big_ls.(i) <- max big_ls.(i-1) big_l's.(i)
   done;
   big_ls
+
+let compute_rs s =
+  let initial_hashtbl_size = 10 in
+  let rs = Hashtbl.create initial_hashtbl_size in
+  String.iteri ~f:(fun i c -> Hashtbl.replace rs c i) s;
+  rs
+
