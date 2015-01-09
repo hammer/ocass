@@ -12,7 +12,6 @@ let all_indices_of e l =
 (***************)
 (* Z algorithm *)
 (***************)
-
 let prefix_match_length text k =
   let pattern = String.drop ~index:k text in
   let rec loop p t n =
@@ -63,7 +62,6 @@ let z_alg s =
 (***********************************)
 (* Simple exact matching algorithm *)
 (***********************************)
-
 (* Assumes "$" does not occur in pattern or text *)
 let simple_exact_match pattern text =
   let n = String.length pattern in
@@ -100,6 +98,13 @@ let compute_big_ls s =
   done;
   big_ls
 
+let compute_l's s =
+  let n = String.length s in
+  let big_ns = compute_big_ns s in
+  let next_l' acc i el  = (if el = i + 1 then i + 1 else (List.hd acc)) :: acc in
+  Array.of_list (BatList.take n (BatArray.fold_lefti next_l' [0] big_ns))
+
+(* TODO(hammer): implement extended bad character rule *)
 let compute_rs s =
   let initial_hashtbl_size = 10 in
   let rs = Hashtbl.create initial_hashtbl_size in

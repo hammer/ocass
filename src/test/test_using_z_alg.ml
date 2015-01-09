@@ -4,6 +4,8 @@ let string1 = "aabcaabxaaz" (* Section 1.3 *)
 let string2 = "aa"
 let string3 = "cabdabdab"
 let string4 = "aabaabcaxaabaabcy"
+let string5 = "abcabc"
+let string6 = "abcababcabc" (* Exercises Z_k' > |beta| *)
 
 let test_split_hd test_ctxt =
   assert_equal ("c", "abdabdab") (Using_z_alg.split_hd string3)
@@ -42,6 +44,12 @@ let test_compute_big_ls test_ctxt =
   let expected_big_ls = [| 0;0;0;0;5;5;5;5;5; |] in
   assert_equal expected_big_ls big_ls
 
+let test_compute_l's test_ctxt =
+  let l's = Using_z_alg.compute_l's string5 in
+  let expected_l's = [| 3;3;3;3;0;0 |] in
+  Array.iter (Format.printf "%d\n") l's;
+  assert_equal expected_l's l's
+
 let test_compute_rs text_ctxt =
   let rs = Using_z_alg.compute_rs string1 in
   let expected_rs_alist = [('a', 9); ('b', 6); ('c', 3); ('x', 7); ('z', 10)] in
@@ -60,6 +68,7 @@ let suite =
       "test_compute_big_ns" >:: test_compute_big_ns;
       "test_compute_big_l's" >:: test_compute_big_l's;
       "test_compute_big_ls" >:: test_compute_big_ls;
+      "test_compute_l's" >:: test_compute_l's;
       "test_compute_rs" >:: test_compute_rs
     ]
 
