@@ -78,19 +78,17 @@ let compute_big_ns s =
   let zs_s_rev = z_alg s_rev in
   BatArray.rev zs_s_rev
 
-let compute_big_l's s =
-  let n = String.length s in
+let compute_big_l's big_ns =
+  let n = Array.length big_ns in
   let big_l's = Array.make n 0 in
-  let big_ns = compute_big_ns s in
   for j = 0 to n - 1 do
     let i = n - big_ns.(j) in
     if i < n then big_l's.(i) <- j
   done;
   big_l's
 
-let compute_big_ls s =
-  let n = String.length s in
-  let big_l's = compute_big_l's s in
+let compute_big_ls big_l's =
+  let n = Array.length big_l's in
   let big_ls = Array.make n 0 in
   big_ls.(1) <- big_l's.(1);
   for i = 2 to n - 1 do
@@ -98,9 +96,8 @@ let compute_big_ls s =
   done;
   big_ls
 
-let compute_l's s =
-  let n = String.length s in
-  let big_ns = compute_big_ns s in
+let compute_l's big_ns =
+  let n = Array.length big_ns in
   let next_l' acc i el  = (if el = i + 1 then i + 1 else (List.hd acc)) :: acc in
   Array.of_list (BatList.take n (BatArray.fold_lefti next_l' [0] big_ns))
 
@@ -111,3 +108,27 @@ let compute_rs s =
   String.iteri ~f:(fun i c -> Hashtbl.replace rs c i) s;
   rs
 
+let bm_exact_match pattern text =
+  let big_ns = compute_big_ns pattern in
+  let l's = compute_l's big_ns in
+  let big_l's = compute_big_l's big_ns in
+  let big_ls = compute_big_ls big_l's in
+  let n = String.length pattern in
+  let m = String.length text in
+  let match_indices = Res.Array.empty () in
+  let k = ref (n - 1) in
+  while !k <  m do
+    let i = ref (n - 1) in
+    let h = ref !k in
+    while !i >= 0 && String.get ~index:!i pattern = String.get ~index:!h text do
+      i := !i - 1;
+      h := !h - 1;
+    done;
+    if !i = (-1) then begin
+      Res.Array.add_one match_indices (!k - n + 1);
+      k := !k + n - l's.(1);
+    end else
+      (* TODO(hammer): implement bad character and good suffix rules *)
+      k := !k + 1;
+  done;
+  Res.Array.to_list match_indices

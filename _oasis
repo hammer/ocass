@@ -17,6 +17,7 @@ Library "using_z_alg"
   Modules: Using_z_alg
   BuildDepends:
     batteries,
+    res,
     sosa
 
 Executable "test_using_z_alg"

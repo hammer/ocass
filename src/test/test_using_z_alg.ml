@@ -35,19 +35,22 @@ let test_compute_big_ns test_ctxt =
   assert_equal expected_big_ns big_ns
 
 let test_compute_big_l's test_ctxt =
-  let big_l's = Using_z_alg.compute_big_l's string3 in
+  let big_ns = Using_z_alg.compute_big_ns string3 in
+  let big_l's = Using_z_alg.compute_big_l's big_ns in
   let expected_big_l's = [| 0;0;0;0;5;0;0;2;0; |] in
   assert_equal expected_big_l's big_l's
 
 let test_compute_big_ls test_ctxt =
-  let big_ls = Using_z_alg.compute_big_ls string3 in
+  let big_ns = Using_z_alg.compute_big_ns string3 in
+  let big_l's = Using_z_alg.compute_big_l's big_ns in
+  let big_ls = Using_z_alg.compute_big_ls big_l's in
   let expected_big_ls = [| 0;0;0;0;5;5;5;5;5; |] in
   assert_equal expected_big_ls big_ls
 
 let test_compute_l's test_ctxt =
-  let l's = Using_z_alg.compute_l's string5 in
+  let big_ns = Using_z_alg.compute_big_ns string5 in
+  let l's = Using_z_alg.compute_l's big_ns in
   let expected_l's = [| 3;3;3;3;0;0 |] in
-  Array.iter (Format.printf "%d\n") l's;
   assert_equal expected_l's l's
 
 let test_compute_rs text_ctxt =
@@ -57,6 +60,11 @@ let test_compute_rs text_ctxt =
   List.iter (fun a -> Hashtbl.add expected_rs (fst a) (snd a)) expected_rs_alist;
   assert_equal (Hashtbl.length expected_rs) (Hashtbl.length rs);
   Hashtbl.iter (fun k v -> assert_equal (Hashtbl.find rs k) v) expected_rs
+
+let test_bm_exact_match test_ctxt =
+  let pattern = string2 in
+  let text = string1 in
+  assert_equal [0; 4; 8] (Using_z_alg.bm_exact_match pattern text)
 
 let suite =
   "suite" >:::
@@ -69,7 +77,8 @@ let suite =
       "test_compute_big_l's" >:: test_compute_big_l's;
       "test_compute_big_ls" >:: test_compute_big_ls;
       "test_compute_l's" >:: test_compute_l's;
-      "test_compute_rs" >:: test_compute_rs
+      "test_compute_rs" >:: test_compute_rs;
+      "test_bm_exact_match" >:: test_bm_exact_match
     ]
 
 let () =
