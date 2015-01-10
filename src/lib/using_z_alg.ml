@@ -112,7 +112,7 @@ let bm_exact_match pattern text =
   let big_ns = compute_big_ns pattern in
   let l's = compute_l's big_ns in
   let big_l's = compute_big_l's big_ns in
-  let big_ls = compute_big_ls big_l's in
+  let rs = compute_rs pattern in
   let n = String.length pattern in
   let m = String.length text in
   let match_indices = Res.Array.empty () in
@@ -127,8 +127,21 @@ let bm_exact_match pattern text =
     if !i = (-1) then begin
       Res.Array.add_one match_indices (!k - n + 1);
       k := !k + n - l's.(1);
-    end else
-      (* TODO(hammer): implement bad character and good suffix rules *)
-      k := !k + 1;
+    end else begin
+      let good_suffix_shift =
+        match () with
+        | () when !i = n - 1 -> 1
+        | () when big_l's.(!i + 1) > 0 -> n - big_l's.(!i + 1)
+        | () -> n - l's.(!i + 1)
+      in
+      let mismatched_char = String.get_exn ~index:!h text in
+      (* TODO(hammer): implement extended bad character rule *)
+      let bad_character_shift =
+        if Hashtbl.mem rs mismatched_char then
+          n - 1 - Hashtbl.find rs mismatched_char
+        else 0
+      in
+      k := !k + max good_suffix_shift bad_character_shift;
+    end;
   done;
   Res.Array.to_list match_indices
